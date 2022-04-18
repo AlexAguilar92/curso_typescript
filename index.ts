@@ -7,7 +7,7 @@ const result: number = sum(a, b);
 console.log("result", result);
 
 type A = {
-  a: number,
+  a: number | null,
   b: number
 };
 
@@ -28,11 +28,11 @@ interface IB extends IA {
   c: string
 };
 
-const iabc: IB = {a: 1, b: 2, c: "c"};
+const iabc: IB = {a: 1, b: 2, c: "a"};
 
 console.log("iabc", iabc);
 
 enum E {
   A = sum(1, 2),
-  B = sum(3, 4),
+  B = 1
 }
