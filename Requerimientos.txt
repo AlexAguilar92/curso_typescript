@@ -1,0 +1,23 @@
+Requerimientos
+
+Curso typescript:
+Git
+
+Curso backend:
+Git
+Postgres v14+
+Node 16.14.2
+
+Curso clean :
+Git
+Postgres v14+
+Node 16.14.2
+
+Curso serverless:
+Git
+Postgres v14+
+Node 16.14.2
+
+Curso solid:
+Git
+Node 16.14.2
