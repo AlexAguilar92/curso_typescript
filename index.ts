@@ -31,3 +31,8 @@ interface IB extends IA {
 const iabc: IB = {a: 1, b: 2, c: "c"};
 
 console.log("iabc", iabc);
+
+enum E {
+  A = sum(1, 2),
+  B = sum(3, 4),
+}

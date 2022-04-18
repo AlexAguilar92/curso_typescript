@@ -25,8 +25,8 @@
     <li><a href="#narrowing">Narrowing</a></li>
     <li><a href="#enum">Enumerables</a></li>
     <li><a href="#asercion">Aserción de tipos</a></li>
-    <li><a href="#genericos">Genéricos</a></li>
     <li><a href="#clases">Clases</a></li>
+    <li><a href="#genericos">Genéricos</a></li>
     <li><a href="#bibliografia">Bibliografía</a></li>
   </ol>
 </details>
@@ -71,11 +71,16 @@ lo cual para JS no es un error, pero que TS nos macará como error, ya que la pr
 <div id="primitivos"></div>
 
 ## Tipos primitivos
-TS tiene un conjunto de tipos de los cuales 3 se consideran primitivos string, number, boolean.
+TS tiene un conjunto de tipos de los cuales estos se consideran primitivos:
 
 - string que acepta valores tales como: "Anita lava la tina. 3".
 - number que acepta valores como: 1, 2.1, -4, ya que JS no tiene un tipo específico para los enteros en tiempo de ejecución.
 - boolean que acepta true o false.
+- null representa una variable vacía pero debe ser declarado para ser soportado strict null checks, su aserción moderna es x!.
+- unknown es otro tipo especial de TS que tiene un comportamiento similar a any, tampoco se recomienda su uso.
+- undefined representa un elemento no definido su aserción moderna es x?.
+- bigint a partir de ES2020, sirve para enteros muy grandes.
+- symbol: Hay una primitiva en JavaScript que se utiliza para crear una referencia única a nivel mundial a través de la función Symbol():
 
 <p align="right">(<a href="#top">inicio</a>)</p>
 
@@ -93,8 +98,7 @@ obj.bar = 100;
 obj = "hello";
 const n: number = obj;
 ```
-- null representa una variable vacía pero debe ser declarado para ser soportado strict null checks.
-- unknown es otro tipo especial de TS que tiene un comportamiento similar a any, tampoco se recomienda su uso.
+
 - void, este tipo de dato se usa cuando no se quiere retornar nada de una funcióny solo se le puede asignar null o undefined.
 - object, este tipo es uno muy común en JS los cuales también se conocen como JSON.
 ```typescript
@@ -226,6 +230,181 @@ function printCoord(pt: Point) {
 printCoord({ x: 100, y: 100 });
 ```
 La principal diferencia entre los alias y las interfaces es que los tipos ya no están abiertos a cambios y las interfaces siempre se pueden extender.
+
+<p align="right">(<a href="#top">inicio</a>)</p>
+
+<div id="narrowing"></div>
+
+## Narrowing
+En TS una variable se puede mover de un tipo menos preciso a uno más prreciso, a este proceso le llamamos type narrowing.
+
+```typescript
+type Animal = {
+  name: string;
+  legs?: number;
+};
+
+//Puede ser undefined por eso verificamos antes
+function addLeg(animal: Animal) {
+  if (animal.legs) {
+    animal.legs = animal.legs + 1;
+  }
+}
+
+function double(item: string | number) {
+  if (typeof item === "string") {
+    return item.concat(item); // es tipo string
+  } else {
+    return item + item; // es tipo number
+  }
+}
+
+class Person {
+  constructor(
+    public firstName: string,
+    public surname: string
+  ) {}
+}
+class Organisation {
+  constructor(public name: string) {}
+}
+type Contact = Person | Organisation;
+
+function sayHello(contact: Contact) {
+  console.log("Hello " + contact.firstName);
+  // 💥 - Propiedad 'firstName' no existe en tipo 'Contact'.
+}
+
+function sayHello(contact: Contact) {
+  //Se verifica con el tipo de variable
+  if (contact instanceof Person) {
+    console.log("Hello " + contact.firstName);
+  }
+}
+````
+
+<p align="right">(<a href="#top">inicio</a>)</p>
+
+<div id="enum"></div>
+
+## Enum
+Las enumeraciones son una de las pocas características que tiene TypeScript que no es una extensión de nivel de tipo de JavaScript.
+
+Las enumeraciones permiten a un desarrollador definir un conjunto de constantes con nombre. El uso de enumeraciones puede facilitar el documento de la intención o crear un conjunto de casos distintos. TypeScript proporciona enumeraciones tanto numéricas como basadas en cadenas.
+
+```typescript
+//Son autoincrementales
+enum Direction {
+  Up = 1,
+  Down,
+  Left,
+  Right,
+}
+
+enum Direction {
+  Up, //Empieza en 0
+  Down,
+  Left,
+  Right,
+}
+
+enum E {
+  A = getSomeValue(),
+  B, //falla, debe inicializarse
+}
+//Enumerable de cadena
+enum Direction {
+  Up = "UP",
+  Down = "DOWN",
+  Left = "LEFT",
+  Right = "RIGHT",
+}
+```
+
+Las enumaraciones en tiempo de ejecución son objetos.
+
+```typescript
+enum E {
+  X,
+  Y,
+  Z,
+}
+ 
+function f(obj: { X: number }) {
+  return obj.X;
+}
+ 
+// Funciona porque E tiene una propiedad llamada X, la cual es un número.
+f(E);
+```
+
+<p align="right">(<a href="#top">inicio</a>)</p>
+
+<div id="asercion"></div>
+
+## Asercion
+
+A veces no tenemos conocimiento sobre un tipo que typescript no puede conocer, es en este momento cuando usamos las aserciones, para afirmar el tipo.
+
+```typescript
+const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
+
+const x = "hello" as number; //Fallará por el tipo.
+```
+
+A veces esta regla puede ser muy conservadora y podría no permitir coerciones más complejas que también serían válidas, estas se pueden llevar a cabo a tráes de una aserción intermedia haciendo uso de any o unknown:
+
+```typescript
+const a = (expr as unknown) as T;
+```
+
+<p align="right">(<a href="#top">inicio</a>)</p>
+
+<div id="clases"></div>
+
+## Clases
+Una clase es como una estructura predefinida que sirve como molde para crear Objetos. En este «molde» se declaran atributos y métodos;  un atributo puede ser una variable, y un método puede ser una función, si lo comparamos con Javascript.
+
+```typescript
+class Persona {
+    nombre:string;
+    constructor(nuevoNombre:string) {
+       this.nombre=nuevoNombre;
+    }
+
+    decirMiNombre() {
+       console.log(this.nombre);
+    }
+}
+```
+
+<p align="right">(<a href="#top">inicio</a>)</p>
+
+<div id="genericos"></div>
+
+## Genéricos
+Son una herramienta potente para poder crear componentes reutilizables, es decir, componeentes que puedan funcionar en una gran variedad de tipos en lugar de solo uno, esto permite usar los componentes y asignarles distintos tipos de acuerdo a las necesidades del desarrollador. Ejemplo:
+
+```typescript
+function identity(arg: number): number {
+  return arg;
+}
+
+//La volvemos "genérica"
+function identity(arg: any): any {
+  return arg;
+}
+//Agregamos los genéricos para adecuarlo mejor a la situación.
+function identity<Type>(arg: Type): Type {
+  return arg;
+}
+
+let output = identity<string>("myString");
+
+let output = identity("myString"); //El compilador infiere el tipo.
+````
+
+
 
 ## Bibliografia
 - [TypeScriptLang](https://www.typescriptlang.org/docs/handbook)
