@@ -448,6 +448,8 @@ class Perro extends Animal {
 
 <div id="Decoradores"></div>
 
+## Decoradores
+
 Los decoradores son una propuesta para incluir en JavaScript que nos permite añadir anotaciones y metadatos o cambiar el comportamiento de clases, propiedades, métodos, parámetros, etc.
 
 Es muy importante saber que los decoradores al ser todavía una propuesta experimental es posible que tenga cambios en el futuro. No obstante, la presencia de estos en el desarrollo web actual está siendo notable, sobre todo en proyectos que utilizan TypeScript
