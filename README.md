@@ -27,6 +27,7 @@
     <li><a href="#asercion">Aserción de tipos</a></li>
     <li><a href="#clases">Clases</a></li>
     <li><a href="#genericos">Genéricos</a></li>
+    <li><a href="#POO">POO</a></li>
     <li><a href="#bibliografia">Bibliografía</a></li>
   </ol>
 </details>
@@ -402,8 +403,67 @@ function identity<Type>(arg: Type): Type {
 let output = identity<string>("myString");
 
 let output = identity("myString"); //El compilador infiere el tipo.
-````
+```
 
+<p align="right">(<a href="#top">inicio</a>)</p>
+
+<div id="POO"></div>
+
+## POO
+
+El paradigma orientado a objetos es completamente soportado por typescript, en este curso nos enfocaremos en implementación de interfaces, abstractos, modificadores de acceso, relación entre clases.
+
+```typescript
+interface IAnimal {
+  avanzar();
+
+  sonar();
+}
+
+abstract class Animal implements IAnimal {
+  avanzar() {
+    console.log("caminar")
+  };
+
+  sonar();
+}
+
+class Perro extends Animal {
+    public readonly color: string;
+    public tipoPelo: number;
+
+    constructor(color: string, tipoPelo) {
+      super();
+      this.color = color;
+      this.tipoPelo = tipoPelo;
+    }
+
+    sonar() {
+      console.log("guau");
+    }
+}
+```
+
+<p align="right">(<a href="#top">inicio</a>)</p>
+
+<div id="Decoradores"></div>
+
+Los decoradores son una propuesta para incluir en JavaScript que nos permite añadir anotaciones y metadatos o cambiar el comportamiento de clases, propiedades, métodos, parámetros, etc.
+
+Es muy importante saber que los decoradores al ser todavía una propuesta experimental es posible que tenga cambios en el futuro. No obstante, la presencia de estos en el desarrollo web actual está siendo notable, sobre todo en proyectos que utilizan TypeScript
+
+```typescript
+function classDecorator(target:Function) {
+  console.log(target);
+}
+
+@classDecorator
+class MyClass {
+  constructor() { 
+      console.log('My class')
+  }
+}
+```
 
 
 ## Bibliografia
